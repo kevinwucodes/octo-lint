@@ -25,3 +25,12 @@ jobs:
 
       - name: Run Spotless Check
         run: ./gradlew spotlessCheck
+
+      - name: Formatting Help Hint
+        if: failure()
+        run: |
+          echo "========================================================="
+          echo "❌ Style violations detected by Spotless!"
+          echo "Run './gradlew spotlessApply' locally to fix automatically."
+          echo "========================================================="
+          exit 1
