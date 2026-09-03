@@ -2,12 +2,11 @@ name: Java Spotless
 
 on:
   pull_request:
-  push:
-    branches-ignore:
-      - 'main'  # Runs immediately when you push to any feature/bugfix branch
+    push:
+      branches: [ "main" ]
 
 jobs:
-  build:
+  linterJob:
     runs-on: ubuntu-latest
     
     steps:
