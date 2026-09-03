@@ -3,7 +3,8 @@ name: Java Spotless
 on:
   pull_request:
   push:
-    branches: [ "main" ]
+    branches-ignore:
+      - 'main'  # Runs immediately when you push to any feature/bugfix branch
 
 jobs:
   build:
