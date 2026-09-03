@@ -16,7 +16,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '26' # Change this to match your project's Java version if needed
+          java-version: '25' # Change this to match your project's Java version if needed
           distribution: 'temurin'
           cache: 'gradle'
 
