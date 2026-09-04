@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("com.diffplug.spotless") version "8.10.1"
+    checkstyle
 }
 
 group = "org.example"
@@ -29,4 +30,9 @@ spotless {
         trimTrailingWhitespace()
         endWithNewline()
     }
+}
+
+checkstyle {
+    toolVersion = "14.1.0"
+    configFile = rootProject.file("config/checkstyle/google_checks.xml")
 }

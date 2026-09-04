@@ -21,14 +21,37 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # 1. Run Spotless Check independently
       - name: Run Spotless Check
+        id: spotless
+        continue-on-error: true
         run: ./gradlew spotlessCheck
 
-      - name: Formatting Help Hint
-        if: failure()
+      # 2. Run Checkstyle independently
+      - name: Run Checkstyle
+        id: checkstyle
+        continue-on-error: true
+        run: ./gradlew checkstyleMain checkstyleTest
+
+      # 3. Custom Error Hint for Spotless Failures
+      - name: Spotless Error Notice
+        if: steps.spotless.outcome == 'failure'
         run: |
           echo "========================================================="
-          echo "❌ Style violations detected by Spotless!"
-          echo "Run './gradlew spotlessApply' locally to fix automatically."
+          echo "❌ Formatting violation detected by Spotless!"
+          echo "👉 Run './gradlew spotlessApply' locally to fix automatically."
           echo "========================================================="
-          exit 1
+
+      # 4. Custom Error Hint for Checkstyle Failures
+      - name: Checkstyle Error Notice
+        if: steps.checkstyle.outcome == 'failure'
+        run: |
+          echo "========================================================="
+          echo "❌ Linting violation detected by Checkstyle!"
+          echo "👉 Review your code structure against config/checkstyle/checkstyle.xml."
+          echo "========================================================="
+
+      # 5. Fail the job if either tool failed
+      - name: Finalize Build Status
+        if: steps.spotless.outcome == 'failure' || steps.checkstyle.outcome == 'failure'
+        run: exit 1
